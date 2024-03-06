@@ -1,7 +1,19 @@
 import {pool} from '../db.js'
 
 
-export const getEmployees = (req, res) => res.send('obteniendo empleados')
+export const getEmployees = async (req, res) => {
+  const [rows] = await pool.query('SELECT * FROM employee')
+  res.json(rows)
+}
+
+export const getEmployee = async (req, res) => {
+  const [rows] = await pool.query('SELECT * FROM employee WHERE id = ?', [req.params.id])
+  
+  if (rows.length <= 0) return res.status(404).json({
+    message: 'Employee not found'
+  })
+  res.send(rows[0])
+}
 
 export const createEmployee = async (req, res) => {
   const {name, salary} = req.body
@@ -13,6 +25,15 @@ export const createEmployee = async (req, res) => {
   })
 }
 
+export const deleteEmployee = async (req, res) => {
+  const [result] = await pool.query('DELETE FROM employee WHERE id = ?', [req.params.id])
+  
+  if (result.affectedRows <= 0) return res.status(404).json({
+    message: 'Employee not found'
+  })
+
+  res.sendStatus(204)
+}
+
 export const updateEmployee = (req, res) => res.send('actualizando empleados')
 
-export const deleteEmployee = (req, res) => res.send('eliminando empleados')
