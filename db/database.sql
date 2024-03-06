@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS companydb;
 
-show DATABASE;
+SHOW DATABASES;
 
 USE companydb;
 
@@ -11,6 +11,12 @@ CREATE TABLE employee (
   PRIMARY KEY (id)
 );
 
-show tables;
+SHOW tables;
 
 DESCRIBE employee;
+
+INSERT INTO employee VALUES
+  (1, 'Joe', 1000),
+  (2, 'Henry', 2000),
+  (3, 'Sam', 2500),
+  (4, 'Max', 1500)
