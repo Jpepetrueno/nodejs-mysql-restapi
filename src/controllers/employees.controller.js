@@ -49,3 +49,22 @@ export const updateEmployee = async (req, res) => {
   res.json(rows[0])
 }
 
+export const replaceEmployee = async (req, res) => {
+  const {id} = req.params
+  const {name, salary} = req.body
+
+  if (!name || !salary) {
+    return res.status(400).json({
+      message: 'Both name and salary are required'
+    })
+  }
+
+  const [result] = await pool.query('UPDATE employee SET name = ?, salary = ? WHERE id = ?', [name, salary, id])
+
+  if (result.affectedRows === 0) return res.status(404).json({
+    message: 'Employee not found'
+  })
+
+  const [rows] = await pool.query('SELECT * FROM employee WHERE id = ?', [id])
+  res.json(rows[0])
+}
